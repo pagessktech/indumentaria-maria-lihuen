@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Maria Lihuen | Indumentaria de Diseño & Arte</title>
+    
+    <!-- Fuentes Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Iconos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuración personalizada -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-gold': '#D4AF37',
+                        'brand-dark': '#050505',
+                        'brand-gray': '#1c1c1c',
+                        'brand-purple': '#8b24b3',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'twinkle': 'twinkle 4s ease-in-out infinite',
+                        'scroll-left': 'scrollLeft 60s linear infinite',
+                        'scroll-right': 'scrollRight 60s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: 0, transform: 'translateY(40px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        twinkle: {
+                            '0%, 100%': { opacity: 0.3, transform: 'scale(1)' },
+                            '50%': { opacity: 1, transform: 'scale(1.2)' },
+                        },
+                        scrollLeft: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        scrollRight: {
+                            '0%': { transform: 'translateX(-50%)' },
+                            '100%': { transform: 'translateX(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- ESTILOS BASE --- */
+        body {
+            background-color: #050505;
+            color: #f3f3f3;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* --- MARQUEE INFINITO (FONDO) --- */
+        .marquee-container {
+            position: absolute;
+            inset: -20% -20%; /* Expandir para rotación */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1.5rem;
+            transform: rotate(-3deg) scale(1.1);
+            opacity: 0.25; /* Sutil para no tapar el texto */
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .marquee-row {
+            display: flex;
+            gap: 1.5rem;
+            width: max-content;
+            will-change: transform;
+        }
+
+        .marquee-img-card {
+            width: 220px;
+            height: 320px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            filter: grayscale(100%);
+            transition: filter 0.5s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        
+        /* Solo se colorean muy levemente si fuera interactivo, pero como es fondo, mantenemos sutil */
+        .marquee-img-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Overlay Gradiente sobre el Marquee para legibilidad del texto */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(5,5,5,0.7) 0%, rgba(5,5,5,0.95) 80%);
+            z-index: 1;
+        }
+
+
+        /* --- NUEVO PRELOADER TEATRAL (TELÓN) --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            pointer-events: none; /* Permite clicks cuando se abre */
+        }
+        
+        .curtain-panel {
+            position: absolute;
+            top: 0;
+            width: 51%; /* Un poco más para solaparse */
+            height: 100%;
+            background: #000;
+            z-index: 2;
+            transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        
+        .curtain-left { left: 0; border-right: 1px solid #1a1a1a; }
+        .curtain-right { right: 0; border-left: 1px solid #1a1a1a; }
+        
+        #preloader.loaded .curtain-left { transform: translateX(-100%); }
+        #preloader.loaded .curtain-right { transform: translateX(100%); }
+        
+        .preloader-content {
+            z-index: 3;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        
+        #preloader.loaded .preloader-content { opacity: 0; }
+
+        .loader-bar-container { width: 150px; height: 1px; background: #333; margin-top: 20px; }
+        .loader-bar { width: 0%; height: 100%; background: #D4AF37; transition: width 0.3s; }
+
+        /* --- EFECTO POLVO MÁGICO (PARTÍCULAS) --- */
+        #magic-particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(212,175,55,0.8) 0%, rgba(212,175,55,0) 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatParticle linear infinite;
+        }
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+
+        /* Lógica SPA */
+        .page-section {
+            display: none !important;
+            opacity: 0;
+            width: 100%;
+            min-height: 100vh;
+            padding-top: 80px;
+            animation: fadeInPage 0.8s ease-out forwards; /* Más lento para drama */
+        }
+        .page-section.active { display: block !important; }
+
+        @keyframes fadeInPage {
+            0% { opacity: 0; transform: scale(0.98) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Hero Layout */
+        #home.page-section {
+            padding-top: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #home.page-section.active {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .glass-card:active { transform: scale(0.98); } 
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+        /* Navbar Link Activo */
+        .nav-link.active-link { color: #D4AF37; border-bottom: 2px solid #D4AF37; }
+
+        /* Animaciones */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .floating-btn { animation: float 6s ease-in-out infinite; }
+        .floating-btn:nth-child(2) { animation-delay: 1s; }
+
+        /* --- ESTILOS DE GALERÍA --- */
+        #gallery-view {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505;
+            z-index: 100;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        
+        #gallery-view.active-gallery {
+            transform: translateX(0);
+        }
+
+        .sticky-back-container {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            padding: 15px 20px;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .gallery-grid-item {
+            opacity: 0;
+            animation: fadeInGallery 0.6s ease forwards;
+        }
+
+        @keyframes fadeInGallery {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- MENÚ MÓVIL FULLSCREEN SOLUCIONADO --- */
+        #mobile-menu-panel {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease-in-out;
+            background-color: #000000 !important;
+            z-index: 100 !important;
+        }
+        #mobile-menu-panel.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-link-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+        #mobile-menu-panel.open .mobile-link-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- ESTILOS PARA CARRUSEL DE TARJETA --- */
+        .card-carousel {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .card-carousel img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            animation: cardFade 12s infinite;
+        }
+        .card-carousel img:nth-child(1) { animation-delay: 0s; }
+        .card-carousel img:nth-child(2) { animation-delay: 4s; }
+        .card-carousel img:nth-child(3) { animation-delay: 8s; }
+
+        @keyframes cardFade {
+            0% { opacity: 0; }
+            5% { opacity: 0.8; }
+            33.33% { opacity: 0.8; }
+            38.33% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        /* Utility para ocultar scrollbar en carrusel móvil */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-brand-gold selection:text-black">
+
+    <!-- CONTENEDOR PARTÍCULAS MÁGICAS (FONDO) -->
+    <div id="magic-particles"></div>
+
+    <!-- PRELOADER TEATRAL -->
+    <div id="preloader">
+        <div class="curtain-panel curtain-left"></div>
+        <div class="curtain-panel curtain-right"></div>
+        <div class="preloader-content">
+            <div class="mb-4 text-brand-gold text-4xl animate-bounce">
+                <i class="fa-solid fa-mask"></i>
+            </div>
+            <h1 class="font-serif text-3xl tracking-widest text-white uppercase mb-2">Maria Lihuen</h1>
+            <p class="text-[10px] text-gray-400 uppercase tracking-[0.3em] mb-6">Atelier de Fantasía</p>
+            <div class="loader-bar-container">
+                <div class="loader-bar" id="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones Flotantes (Redes) -->
+    <div class="fixed bottom-6 right-6 z-40 flex flex-col gap-4">
+        <a href="https://wa.me/5491153209614" target="_blank" class="floating-btn bg-green-500 w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(34,197,94,0.4)] text-white text-2xl active:scale-90 transition-transform"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://www.instagram.com/indumentaria_maria.lihuen/" target="_blank" class="floating-btn bg-gradient-to-tr from-yellow-500 via-red-500 to-purple-600 w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.4)] text-white text-2xl active:scale-90 transition-transform"><i class="fa-brands fa-instagram"></i></a>
+    </div>
+
+    <!-- Navegación Desktop & Botón Móvil -->
+    <nav class="fixed w-full z-50 top-0 bg-black/80 backdrop-blur-md border-b border-white/10 shadow-lg transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 cursor-pointer active:scale-95 transition-transform" onclick="navigateTo('home')">
+                    <span class="font-serif text-2xl text-white tracking-wider">ML<span class="text-brand-gold">.</span></span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <button onclick="navigateTo('home')" class="nav-link active-link text-sm font-medium hover:text-brand-gold transition-all text-white uppercase tracking-widest border-b-2 border-transparent pb-1">Inicio</button>
+                        <button onclick="navigateTo('sobre-mi')" class="nav-link text-sm font-medium hover:text-brand-gold transition-all text-gray-300 uppercase tracking-widest border-b-2 border-transparent pb-1">Sobre Mí</button>
+                        <button onclick="navigateTo('colecciones')" class="nav-link text-sm font-medium hover:text-brand-gold transition-all text-gray-300 uppercase tracking-widest border-b-2 border-transparent pb-1">Colecciones</button>
+                        <button onclick="navigateTo('testimonios')" class="nav-link text-sm font-medium hover:text-brand-gold transition-all text-gray-300 uppercase tracking-widest border-b-2 border-transparent pb-1">Testimonios</button>
+                        <button onclick="navigateTo('contacto')" class="nav-link px-6 py-2 border border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black transition-all duration-300 uppercase text-xs tracking-widest"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Contacto</button>
+                    </div>
+                </div>
+
+                <!-- Mobile Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-white p-4 focus:outline-none active:text-brand-gold transition-colors" aria-label="Abrir menú">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- FULL SCREEN MENU OVERLAY -->
+    <div id="mobile-menu-panel" class="fixed inset-0 flex flex-col items-center justify-center text-center bg-black">
+        <button onclick="toggleMenu()" class="absolute top-6 right-6 text-white hover:text-brand-gold p-4 transition-colors z-[101]">
+            <i class="fa-solid fa-xmark text-4xl"></i>
+        </button>
+        <div class="space-y-6 flex flex-col w-full px-8">
+            <button onclick="navigateTo('home')" class="mobile-link-item text-3xl text-white font-serif hover:text-brand-gold transition-colors tracking-widest" style="transition-delay: 0.1s;">Inicio</button>
+            <div class="w-16 h-px bg-white/10 mx-auto mobile-link-item" style="transition-delay: 0.15s;"></div>
+            <button onclick="navigateTo('sobre-mi')" class="mobile-link-item text-3xl text-white font-serif hover:text-brand-gold transition-colors tracking-widest" style="transition-delay: 0.2s;">Sobre Mí</button>
+            <div class="w-16 h-px bg-white/10 mx-auto mobile-link-item" style="transition-delay: 0.25s;"></div>
+            <button onclick="navigateTo('colecciones')" class="mobile-link-item text-3xl text-white font-serif hover:text-brand-gold transition-colors tracking-widest" style="transition-delay: 0.3s;">Colecciones</button>
+            <div class="w-16 h-px bg-white/10 mx-auto mobile-link-item" style="transition-delay: 0.35s;"></div>
+            <button onclick="navigateTo('testimonios')" class="mobile-link-item text-3xl text-white font-serif hover:text-brand-gold transition-colors tracking-widest" style="transition-delay: 0.4s;">Testimonios</button>
+            <div class="w-16 h-px bg-white/10 mx-auto mobile-link-item" style="transition-delay: 0.45s;"></div>
+            <button onclick="navigateTo('contacto')" class="mobile-link-item text-3xl text-brand-gold font-serif font-bold tracking-widest uppercase" style="transition-delay: 0.5s;">Contacto</button>
+        </div>
+        <div class="absolute bottom-12 w-full text-center mobile-link-item" style="transition-delay: 0.6s;">
+            <p class="text-gray-500 text-[10px] uppercase tracking-[0.3em] mb-4">Síguenos</p>
+            <div class="flex justify-center gap-10 text-2xl text-white/50">
+                <a href="https://www.instagram.com/indumentaria_maria.lihuen/" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://wa.me/5491153209614" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main>
+
+        <!-- PÁGINA 1: INICIO (CON MARQUEE INFINITO) -->
+        <section id="home" class="page-section active relative">
+            
+            <!-- MARQUEE BACKGROUND -->
+            <div class="marquee-container">
+                <!-- Fila 1 (Scroll Izquierda) -->
+                <div class="marquee-row animate-scroll-left">
+                    <!-- Duplicado de imágenes para efecto infinito -->
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/3_h6r1tf.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296564/3_lxwaaz.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338084/1_slfn4e.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338332/1_bap3m2.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338526/1_gnqvrv.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/14_svs1z5.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/9_j0sah5.jpg" alt="Img"></div>
+                    <!-- Repetir set -->
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/3_h6r1tf.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296564/3_lxwaaz.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338084/1_slfn4e.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338332/1_bap3m2.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338526/1_gnqvrv.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/14_svs1z5.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/9_j0sah5.jpg" alt="Img"></div>
+                </div>
+
+                <!-- Fila 2 (Scroll Derecha) -->
+                <div class="marquee-row animate-scroll-right">
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/2_oewhub.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338333/3_usg3fg.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338527/2_oosz6k.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/7_khtqap.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/10_xaxchb.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/5_t5sthz.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338334/4_nzxhck.jpg" alt="Img"></div>
+                    <!-- Repetir set -->
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/2_oewhub.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338333/3_usg3fg.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338527/2_oosz6k.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/7_khtqap.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/10_xaxchb.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/5_t5sthz.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338334/4_nzxhck.jpg" alt="Img"></div>
+                </div>
+
+                 <!-- Fila 3 (Scroll Izquierda) -->
+                 <div class="marquee-row animate-scroll-left">
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/8_ltcjmm.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296566/14_sxf4du.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/6_nli32j.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338337/5_h8fh3h.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338530/3_ip5s4v.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/12_r4p3un.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296566/15_agqbbz.jpg" alt="Img"></div>
+                     <!-- Repetir set -->
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/8_ltcjmm.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296566/14_sxf4du.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/6_nli32j.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338337/5_h8fh3h.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338530/3_ip5s4v.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/12_r4p3un.jpg" alt="Img"></div>
+                    <div class="marquee-img-card"><img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296566/15_agqbbz.jpg" alt="Img"></div>
+                </div>
+            </div>
+
+            <!-- Overlay de Legibilidad -->
+            <div class="hero-overlay"></div>
+
+            <!-- Contenido Texto Hero -->
+            <div class="text-center px-6 max-w-4xl mx-auto z-10 relative">
+                <div class="mb-6 animate-twinkle">
+                    <i class="fa-solid fa-crown text-brand-gold text-2xl"></i>
+                </div>
+                <p class="text-brand-gold tracking-[0.4em] uppercase text-xs md:text-sm mb-6 font-medium animate-slide-up stagger-1">
+                    Confección Artesanal Argentina
+                </p>
+                <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl text-white leading-[1.1] mb-8 animate-slide-up stagger-2 drop-shadow-2xl">
+                    Magia en <br> <span class="italic text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-yellow-200 to-brand-gold">Cada Puntada</span>
+                </h1>
+                <p class="text-gray-200 text-lg font-light mb-12 max-w-lg mx-auto leading-relaxed animate-slide-up stagger-3 drop-shadow-lg">
+                    Alta costura para patín, disfraces de ensueño y momentos que merecen brillar.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-5 justify-center animate-slide-up stagger-4">
+                    <button onclick="navigateTo('colecciones')" class="px-10 py-4 bg-white text-black font-semibold hover:bg-brand-gold active:scale-95 transition-all uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                        Ver Colecciones
+                    </button>
+                    <button onclick="navigateTo('contacto')" class="px-10 py-4 border border-white/30 backdrop-blur-sm text-white hover:bg-white hover:text-black active:scale-95 transition-all uppercase tracking-widest text-sm">
+                        Crear Fantasía
+                    </button>
+                </div>
+            </div>
+            <div class="absolute bottom-10 animate-bounce z-10 opacity-50">
+                <i class="fa-solid fa-chevron-down text-white text-xl"></i>
+            </div>
+        </section>
+
+        <!-- PÁGINA 2: SOBRE MÍ -->
+        <section id="sobre-mi" class="page-section bg-brand-dark">
+            <div class="max-w-7xl mx-auto px-6 py-8 md:py-12">
+                <div class="text-center mb-12 animate-slide-up">
+                    <h2 class="font-serif text-3xl md:text-5xl text-white">El Alma del <span class="text-brand-gold italic">Atelier</span></h2>
+                    <div class="flex justify-center mt-4 text-brand-purple text-lg"><i class="fa-solid fa-wand-magic"></i></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="relative animate-slide-up stagger-1 group">
+                        <div class="absolute -top-4 -left-4 w-full h-full border border-brand-gold opacity-30 group-hover:top-4 group-hover:left-4 transition-all duration-500"></div>
+                        <img src="https://images.unsplash.com/photo-1596903250645-1c5861794274?q=80&w=1000&auto=format&fit=crop" class="w-full h-auto shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700 object-cover aspect-[4/5] relative z-10" alt="Atelier">
+                    </div>
+                    <div class="animate-slide-up stagger-2">
+                        <h3 class="font-serif text-2xl md:text-3xl mb-6 text-white">María Lihuen</h3>
+                        <p class="text-gray-400 mb-6 leading-relaxed">
+                            Más que indumentaria, creamos personajes. Soy una apasionada por los detalles, donde cada <span class="text-brand-gold">lentejuela</span> y <span class="text-brand-gold">pluma</span> cuenta una historia única.
+                        </p>
+                        <p class="text-gray-400 mb-8 leading-relaxed">
+                            Mi atelier se especializa en transformar ideas abstractas en realidad. Desde un superhéroe hasta un vestido de gala, la fantasía es nuestro idioma.
+                        </p>
+                        <div class="grid grid-cols-2 gap-6 mt-10 border-t border-white/10 pt-8">
+                            <div class="text-center md:text-left">
+                                <span class="block text-4xl font-serif text-brand-gold mb-1">10+</span>
+                                <span class="text-[10px] md:text-xs uppercase text-gray-500 tracking-widest">Años de Magia</span>
+                            </div>
+                            <div class="text-center md:text-left">
+                                <span class="block text-4xl font-serif text-brand-gold mb-1">500+</span>
+                                <span class="text-[10px] md:text-xs uppercase text-gray-500 tracking-widest">Sueños Cumplidos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PÁGINA 3: COLECCIONES -->
+        <section id="colecciones" class="page-section bg-gradient-to-b from-brand-gray to-black">
+             <div class="max-w-7xl mx-auto px-6 py-8 md:py-12">
+                <div class="text-center mb-12 animate-slide-up">
+                    <h2 class="font-serif text-3xl md:text-5xl text-white">Nuestras <span class="text-brand-purple italic">Colecciones</span></h2>
+                    <p class="text-gray-400 mt-3 text-sm">Explora el vestuario de tus sueños.</p>
+                </div>
+
+                <!-- Grid de 5 Categorías -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    
+                    <!-- 1. Danza y Patín -->
+                    <div class="group relative overflow-hidden h-[400px] rounded-sm glass-card animate-slide-up stagger-1 border-t-2 border-transparent hover:border-brand-gold transition-all">
+                        <div class="card-carousel">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/3_h6r1tf.jpg" alt="Danza 1">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/5_ghgvtv.jpg" alt="Danza 2">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/14_svs1z5.jpg" alt="Danza 3">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 z-10"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                            <div class="mb-2"><i class="fa-solid fa-person-skating text-brand-gold"></i></div>
+                            <h3 class="font-serif text-2xl text-white mb-2">Danza y Patín</h3>
+                            <p class="text-xs text-gray-400 mb-4 line-clamp-2">Brillo y movimiento para la pista.</p>
+                            <button onclick="openGallery('danza')" class="w-full py-3 bg-brand-gold text-black font-bold text-xs uppercase tracking-widest hover:bg-white transition-colors shadow-lg active:scale-95">
+                                Ver Galería
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Niños -->
+                    <div class="group relative overflow-hidden h-[400px] rounded-sm glass-card animate-slide-up stagger-2 border-t-2 border-transparent hover:border-brand-gold transition-all">
+                        <div class="card-carousel">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296564/3_lxwaaz.jpg" alt="Niños 1">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/9_j0sah5.jpg" alt="Niños 2">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765296566/14_sxf4du.jpg" alt="Niños 3">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 z-10"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                            <div class="mb-2"><i class="fa-solid fa-child-reaching text-brand-gold"></i></div>
+                            <h3 class="font-serif text-2xl text-white mb-2">Niños</h3>
+                            <p class="text-xs text-gray-400 mb-4 line-clamp-2">Disfraces donde la imaginación vuela.</p>
+                            <button onclick="openGallery('ninos')" class="w-full py-3 bg-brand-gold text-black font-bold text-xs uppercase tracking-widest hover:bg-white transition-colors shadow-lg active:scale-95">
+                                Ver Galería
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Egresados -->
+                    <div class="group relative overflow-hidden h-[400px] rounded-sm glass-card animate-slide-up stagger-3 border-t-2 border-transparent hover:border-brand-gold transition-all">
+                        <div class="card-carousel">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338084/1_slfn4e.jpg" alt="Egresados 1">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/2_oewhub.jpg" alt="Egresados 2">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/3_vhs9vp.jpg" alt="Egresados 3">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 z-10"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                            <div class="mb-2"><i class="fa-solid fa-user-graduate text-brand-gold"></i></div>
+                            <h3 class="font-serif text-2xl text-white mb-2">Egresados</h3>
+                            <p class="text-xs text-gray-400 mb-4 line-clamp-2">Tu noche, tu diseño exclusivo.</p>
+                            <button onclick="openGallery('egresados')" class="w-full py-3 bg-brand-gold text-black font-bold text-xs uppercase tracking-widest hover:bg-white transition-colors shadow-lg active:scale-95">
+                                Ver Galería
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 4. Adultos -->
+                    <div class="group relative overflow-hidden h-[400px] rounded-sm glass-card animate-slide-up stagger-4 border-t-2 border-transparent hover:border-brand-gold transition-all">
+                        <div class="card-carousel">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338332/1_bap3m2.jpg" alt="Adultos 1">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338333/3_usg3fg.jpg" alt="Adultos 2">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338333/2_tfmnq6.jpg" alt="Adultos 3">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 z-10"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                            <div class="mb-2"><i class="fa-solid fa-masks-theater text-brand-gold"></i></div>
+                            <h3 class="font-serif text-2xl text-white mb-2">Adultos</h3>
+                            <p class="text-xs text-gray-400 mb-4 line-clamp-2">Disfraces temáticos y alta costura.</p>
+                            <button onclick="openGallery('adultos')" class="w-full py-3 bg-brand-gold text-black font-bold text-xs uppercase tracking-widest hover:bg-white transition-colors shadow-lg active:scale-95">
+                                Ver Galería
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 5. Actos Escolares -->
+                    <div class="group relative overflow-hidden h-[400px] md:col-span-2 lg:col-span-2 rounded-sm glass-card animate-slide-up stagger-1 border-t-2 border-transparent hover:border-brand-gold transition-all">
+                        <div class="card-carousel">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338526/1_gnqvrv.jpg" alt="Actos 1">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338527/2_oosz6k.jpg" alt="Actos 2">
+                            <img src="https://res.cloudinary.com/dmosaczun/image/upload/v1765338530/3_ip5s4v.jpg" alt="Actos 3">
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 z-10"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                            <div class="mb-2"><i class="fa-solid fa-school text-brand-gold"></i></div>
+                            <h3 class="font-serif text-2xl text-white mb-2">Actos Escolares</h3>
+                            <p class="text-xs text-gray-400 mb-4">Vestuario masivo con detalle artesanal.</p>
+                            <button onclick="openGallery('actos')" class="w-max px-8 py-3 bg-brand-gold text-black font-bold text-xs uppercase tracking-widest hover:bg-white transition-colors shadow-lg active:scale-95">
+                                Ver Galería
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+             </div>
+        </section>
+
+        <!-- PÁGINA 4: TESTIMONIOS -->
+        <section id="testimonios" class="page-section bg-brand-dark">
+             <div class="max-w-7xl mx-auto px-6 py-8 md:py-12">
+                <div class="text-center mb-12 animate-slide-up">
+                    <h2 class="font-serif text-3xl md:text-5xl text-white">Voces del <span class="text-brand-gold italic">Atelier</span></h2>
+                    <p class="text-gray-400 mt-4 max-w-2xl mx-auto text-sm md:text-base">Historias reales de magia hecha realidad. Desliza para leer más experiencias.</p>
+                </div>
+
+                <!-- Contenedor Carrusel Móvil / Grid Desktop -->
+                <div class="flex md:grid md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 md:pb-0 px-4 md:px-0 -mx-4 md:mx-auto max-w-6xl no-scrollbar">
+                    
+                    <!-- Testimonio 1 -->
+                    <div class="min-w-[85vw] md:min-w-0 snap-center p-8 border border-white/10 bg-white/5 relative rounded-xl animate-slide-up stagger-1 shadow-lg hover:border-brand-gold/30 transition-all group flex flex-col justify-between h-auto">
+                        <div>
+                            <div class="flex text-brand-gold text-xs mb-4 gap-1">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-gray-300 italic mb-6 font-light leading-relaxed">"La malla de patín quedó impecable. Brilló en la pista y se ajustó perfecto al movimiento. La atención fue un sueño."</p>
+                        </div>
+                        <div class="flex items-center gap-3 mt-auto border-t border-white/5 pt-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gray flex items-center justify-center text-brand-gold font-serif border border-white/10">SM</div>
+                            <div>
+                                <h4 class="text-white font-medium text-sm">Sofía Martínez</h4>
+                                <p class="text-[10px] text-gray-500 uppercase tracking-wider">Patín Artístico</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonio 2 -->
+                    <div class="min-w-[85vw] md:min-w-0 snap-center p-8 border border-white/10 bg-white/5 relative rounded-xl animate-slide-up stagger-2 shadow-lg hover:border-brand-gold/30 transition-all group flex flex-col justify-between h-auto">
+                        <div>
+                            <div class="flex text-brand-gold text-xs mb-4 gap-1">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-gray-300 italic mb-6 font-light leading-relaxed">"El traje de Aladdín superó mis expectativas. Las telas son de calidad teatral y mi hijo estaba feliz. ¡Súper recomendado!"</p>
+                        </div>
+                        <div class="flex items-center gap-3 mt-auto border-t border-white/5 pt-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gray flex items-center justify-center text-brand-gold font-serif border border-white/10">LR</div>
+                            <div>
+                                <h4 class="text-white font-medium text-sm">Luciana R.</h4>
+                                <p class="text-[10px] text-gray-500 uppercase tracking-wider">Infantil</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonio 3 -->
+                    <div class="min-w-[85vw] md:min-w-0 snap-center p-8 border border-white/10 bg-white/5 relative rounded-xl animate-slide-up stagger-3 shadow-lg hover:border-brand-gold/30 transition-all group flex flex-col justify-between h-auto">
+                        <div>
+                            <div class="flex text-brand-gold text-xs mb-4 gap-1">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-gray-300 italic mb-6 font-light leading-relaxed">"Necesitaba 30 trajes para el acto escolar y María los tuvo listos antes de tiempo con un nivel de detalle increíble."</p>
+                        </div>
+                        <div class="flex items-center gap-3 mt-auto border-t border-white/5 pt-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gray flex items-center justify-center text-brand-gold font-serif border border-white/10">CO</div>
+                            <div>
+                                <h4 class="text-white font-medium text-sm">Colegio Olivos</h4>
+                                <p class="text-[10px] text-gray-500 uppercase tracking-wider">Institucional</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonio 4 -->
+                    <div class="min-w-[85vw] md:min-w-0 snap-center p-8 border border-white/10 bg-white/5 relative rounded-xl animate-slide-up stagger-4 shadow-lg hover:border-brand-gold/30 transition-all group flex flex-col justify-between h-auto">
+                        <div>
+                            <div class="flex text-brand-gold text-xs mb-4 gap-1">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <p class="text-gray-300 italic mb-6 font-light leading-relaxed">"Mi vestido de egresados fue único. Diseñamos juntas cada parte y el resultado final fue tal cual lo imaginé."</p>
+                        </div>
+                        <div class="flex items-center gap-3 mt-auto border-t border-white/5 pt-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gray flex items-center justify-center text-brand-gold font-serif border border-white/10">VB</div>
+                            <div>
+                                <h4 class="text-white font-medium text-sm">Valentina B.</h4>
+                                <p class="text-[10px] text-gray-500 uppercase tracking-wider">Egresados</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonio 5 -->
+                     <div class="min-w-[85vw] md:min-w-0 snap-center p-8 border border-white/10 bg-white/5 relative rounded-xl animate-slide-up stagger-1 shadow-lg hover:border-brand-gold/30 transition-all group flex flex-col justify-between h-auto">
+                        <div>
+                            <div class="flex text-brand-gold text-xs mb-4 gap-1">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-gray-300 italic mb-6 font-light leading-relaxed">"Excelente calidad de telas y confección. Se nota el amor en cada costura. Volveré para el próximo evento."</p>
+                        </div>
+                        <div class="flex items-center gap-3 mt-auto border-t border-white/5 pt-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gray flex items-center justify-center text-brand-gold font-serif border border-white/10">MP</div>
+                            <div>
+                                <h4 class="text-white font-medium text-sm">Martín P.</h4>
+                                <p class="text-[10px] text-gray-500 uppercase tracking-wider">Cliente</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <!-- Indicador de Scroll para Móvil -->
+                <div class="md:hidden flex justify-center gap-2 mt-4 opacity-50">
+                    <div class="w-1.5 h-1.5 rounded-full bg-brand-gold"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                </div>
+             </div>
+        </section>
+
+        <!-- PÁGINA 5: CONTACTO -->
+        <section id="contacto" class="page-section bg-brand-gray">
+             <div class="max-w-7xl mx-auto px-6 py-8 md:py-12">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="animate-slide-up">
+                        <h2 class="font-serif text-4xl text-white mb-6">Hagamos Magia</h2>
+                        <p class="text-gray-400 mb-8">Cuéntanos tu idea, nosotros ponemos la tela y el talento.</p>
+                        <div class="space-y-6">
+                            <a href="https://wa.me/5491153209614" target="_blank" class="flex items-center gap-4 p-4 rounded-lg bg-white/5 border border-white/5 hover:border-brand-gold/50 transition-colors"><i class="fa-brands fa-whatsapp text-brand-gold text-2xl"></i> <span class="text-gray-300 text-sm">+54 9 11 5320-9614</span></a>
+                            <!-- CAMBIO: Instagram en lugar de Email -->
+                            <a href="https://www.instagram.com/indumentaria_maria.lihuen/" target="_blank" class="flex items-center gap-4 p-4 rounded-lg bg-white/5 border border-white/5 hover:border-brand-gold/50 transition-colors"><i class="fa-brands fa-instagram text-brand-gold text-2xl"></i> <span class="text-gray-300 text-sm">@indumentaria_maria.lihuen</span></a>
+                        </div>
+                    </div>
+                    <div class="bg-black/50 p-6 md:p-8 border border-white/10 rounded-lg animate-slide-up stagger-2 relative overflow-hidden">
+                        <!-- Decoración de fondo en form -->
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-brand-gold"><i class="fa-solid fa-pen-nib"></i></div>
+                        <!-- CAMBIO: onsubmit llama a sendToWhatsapp() y agregados IDs a inputs -->
+                        <form onsubmit="event.preventDefault(); sendToWhatsapp();" class="space-y-5 relative z-10">
+                            <input id="form-name" type="text" class="w-full bg-brand-gray border border-white/10 p-4 text-white text-sm focus:border-brand-gold outline-none rounded-sm" placeholder="Nombre" required>
+                            <input id="form-contact" type="text" class="w-full bg-brand-gray border border-white/10 p-4 text-white text-sm focus:border-brand-gold outline-none rounded-sm" placeholder="Tu Teléfono / Instagram" required>
+                            <textarea id="form-message" class="w-full bg-brand-gray border border-white/10 p-4 text-white text-sm focus:border-brand-gold outline-none h-32 rounded-sm resize-none" placeholder="¿Qué disfraz soñas?" required></textarea>
+                            <button type="submit" class="w-full bg-brand-gold text-black font-bold py-4 text-sm uppercase tracking-widest hover:bg-white active:scale-95 transition-all rounded-sm shadow-lg">Enviar a WhatsApp</button>
+                        </form>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+    </main>
+
+    <!-- APARTADO GALERÍA (MODO MASONRY PARA IMÁGENES COMPLETAS) -->
+    <div id="gallery-view">
+        <!-- Sticky Header / Botón Volver -->
+        <div class="sticky-back-container border-b border-white/10">
+            <button onclick="closeGallery()" class="flex items-center gap-3 text-white hover:text-brand-gold transition-colors group">
+                <i class="fa-solid fa-arrow-left text-xl group-active:-translate-x-1 transition-transform"></i>
+                <span class="text-sm font-bold uppercase tracking-widest">Volver</span>
+            </button>
+            <h3 id="gallery-title" class="ml-auto font-serif text-xl text-brand-gold italic">Galería</h3>
+        </div>
+
+        <!-- Contenedor de Fotos Masonry -->
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div id="gallery-grid" class="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
+                <!-- Las fotos se inyectan con JS aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-8 border-t border-white/10 z-50">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-6">
+            <p>&copy; 2024 Maria Lihuen. <span class="hidden md:inline">|</span> Diseño de Autor</p>
+            <div class="flex gap-8">
+                <a href="https://www.instagram.com/indumentaria_maria.lihuen/" target="_blank" class="hover:text-brand-gold">Instagram</a>
+                <a href="#" class="hover:text-brand-gold">Facebook</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. GENERADOR DE POLVO DE HADAS (Partículas) ---
+        function createParticles() {
+            const container = document.getElementById('magic-particles');
+            const particleCount = 20; // Número de partículas
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Posición y tamaño aleatorio
+                const size = Math.random() * 4 + 2 + 'px';
+                particle.style.width = size;
+                particle.style.height = size;
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDuration = Math.random() * 10 + 10 + 's'; // 10-20s duración
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // --- 2. PRELOADER TEATRAL LOGIC ---
+        window.addEventListener('load', () => {
+            const bar = document.getElementById('loader-bar');
+            const preloader = document.getElementById('preloader');
+            createParticles(); // Iniciar partículas
+
+            let w = 0;
+            const i = setInterval(() => {
+                w += Math.random() * 10; 
+                if(w > 100) w = 100;
+                bar.style.width = w + '%';
+                
+                if(w === 100) { 
+                    clearInterval(i); 
+                    // Iniciar secuencia de apertura
+                    setTimeout(() => {
+                        preloader.classList.add('loaded'); // Abre cortinas
+                        // Destruir preloader del DOM después de animación para liberar memoria
+                        setTimeout(() => {
+                            preloader.style.display = 'none';
+                        }, 1500);
+                    }, 500);
+                }
+            }, 30);
+        });
+
+        // --- 3. MENÚ MÓVIL FULLSCREEN LOGIC ---
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const panel = document.getElementById('mobile-menu-panel');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            if (!panel) return;
+            
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                panel.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            } else {
+                panel.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        if(menuBtn) {
+            menuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleMenu();
+            });
+        }
+
+        // --- 4. NAVEGACIÓN SPA ---
+        function navigateTo(id) {
+            if (isMenuOpen) toggleMenu();
+
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(id);
+            if(target) {
+                window.scrollTo({top:0, behavior:'smooth'});
+                setTimeout(() => {
+                    target.classList.add('active');
+                    target.querySelectorAll('.animate-slide-up').forEach(el => {
+                        el.style.animation = 'none'; el.offsetHeight; el.style.animation = null; 
+                    });
+                }, 50);
+            }
+            
+            document.querySelectorAll('.nav-link').forEach(l => {
+                l.classList.remove('active-link', 'text-brand-gold');
+                l.classList.add('text-gray-300');
+                if(l.getAttribute('onclick') && l.getAttribute('onclick').includes(id)) {
+                    l.classList.add('active-link', 'text-brand-gold');
+                    l.classList.remove('text-gray-300');
+                }
+            });
+        }
+
+        // --- 5. LÓGICA DE GALERÍA ---
+        const galleryData = {
+            'danza': [
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/3_h6r1tf.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/5_ghgvtv.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/14_svs1z5.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/2_xftzhz.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/9_ggiibd.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/4_hebizc.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/6_erxxjq.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/8_ltcjmm.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/7_khtqap.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337585/12_r4p3un.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337584/1_mjjire.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337586/11_ssqxhn.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337586/13_mdaan8.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337588/10_fxmxug.jpg'
+            ],
+            'ninos': [
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296564/3_lxwaaz.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296564/2_ww5vgw.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296564/7_pbqfcy.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296564/8_x3wkgl.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296564/4_pae5hc.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296564/1_ft9rlw.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/5_p2w5lj.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/10_xaxchb.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/6_ppjqwy.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/9_j0sah5.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/11_gs9jxa.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296565/12_zeocfw.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296566/15_agqbbz.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296566/14_sxf4du.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296566/16_ppqbv8.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296566/17_dkh3hx.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296566/13_q8paci.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765296586/18_elnfza.jpg'
+            ],
+            'egresados': [
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765338084/1_slfn4e.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/2_oewhub.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/5_t5sthz.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/6_nli32j.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/4_f8mnmw.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/7_je8ugx.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765337994/3_vhs9vp.jpg'
+            ],
+            'adultos': [
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765338332/1_bap3m2.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765338333/3_usg3fg.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765338333/2_tfmnq6.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765338334/4_nzxhck.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765338337/5_h8fh3h.jpg'
+            ],
+            'actos': [
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765338526/1_gnqvrv.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765338527/2_oosz6k.jpg',
+                'https://res.cloudinary.com/dmosaczun/image/upload/v1765338530/3_ip5s4v.jpg'
+            ]
+        };
+
+        const titles = {
+            'danza': 'Danza y Patín', 'ninos': 'Niños', 'egresados': 'Egresados',
+            'adultos': 'Adultos', 'actos': 'Actos Escolares'
+        };
+
+        function openGallery(category) {
+            const galleryView = document.getElementById('gallery-view');
+            const galleryGrid = document.getElementById('gallery-grid');
+            const galleryTitle = document.getElementById('gallery-title');
+            
+            if(!galleryView || !galleryGrid || !galleryTitle) return;
+
+            galleryGrid.innerHTML = '';
+            galleryTitle.textContent = titles[category] || 'Galería';
+
+            const images = galleryData[category] || [];
+            images.forEach((src, index) => {
+                const div = document.createElement('div');
+                div.className = 'gallery-grid-item rounded-lg overflow-hidden shadow-lg mb-4 break-inside-avoid'; 
+                div.style.animationDelay = `${index * 0.1}s`;
+                div.innerHTML = `<img src="${src}" class="w-full h-auto block hover:scale-105 transition-transform duration-700" alt="Foto">`;
+                galleryGrid.appendChild(div);
+            });
+
+            galleryView.classList.add('active-gallery');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGallery() {
+            const galleryView = document.getElementById('gallery-view');
+            if(galleryView) galleryView.classList.remove('active-gallery');
+            document.body.style.overflow = '';
+        }
+
+        // --- 6. ENVÍO A WHATSAPP (LÓGICA DEL FORMULARIO) ---
+        function sendToWhatsapp() {
+            const name = document.getElementById('form-name').value;
+            const contact = document.getElementById('form-contact').value;
+            const message = document.getElementById('form-message').value;
+
+            if(!name || !contact || !message) return;
+
+            // Construye el mensaje
+            const text = `Hola Maria Lihuen! Soy ${name}. ${message}. (Mi contacto es: ${contact})`;
+            // Crea la URL de WhatsApp API
+            const url = `https://wa.me/5491153209614?text=${encodeURIComponent(text)}`;
+            
+            // Abre WhatsApp en nueva pestaña
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
